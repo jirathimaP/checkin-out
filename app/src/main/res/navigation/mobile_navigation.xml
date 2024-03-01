@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/menu_attendance">
+
+    <fragment
+        android:id="@+id/menu_attendance"
+        android:name="com.jirap.checkinout.attendance.AttendanceFragment"
+        android:label="@string/menu_attendance"
+        tools:layout="@layout/fragment_attendance" />
+
+    <fragment
+        android:id="@+id/menu_attendance_history"
+        android:name="com.jirap.checkinout.attendance.AttendanceHistoryFragment"
+        android:label="@string/menu_attendance_history"
+        tools:layout="@layout/fragment_attendance_history" />
+
+    <fragment
+        android:id="@+id/menu_request_attendance"
+        android:name="com.jirap.checkinout.reqattendance.ReqAttendanceFragment"
+        android:label="@string/menu_request_attendance"
+        tools:layout="@layout/fragment_req_attendance_history" />
+    <fragment
+        android:id="@+id/menu_request_attendance_history"
+        android:name="com.jirap.checkinout.reqattendance.ReqAttendanceHistoryFragment"
+        android:label="@string/menu_request_attendance_history"
+        tools:layout="@layout/fragment_req_attendance_history" />
+</navigation>
