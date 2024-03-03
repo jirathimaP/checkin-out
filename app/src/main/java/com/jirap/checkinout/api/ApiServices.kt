@@ -19,6 +19,9 @@ interface ApiServices {
     @POST("dev-hr/attendance")
     fun attendance(@Body data: AttendanceRequest): Call<AttendanceResponse>
 
+    @POST("dev-hr/attendance")
+    fun attendanceHistory(@Body data: AttendanceRequest): Call<AttendanceResponseHistory>
+
     @POST("dev-hr/attendance-request")
     fun requestAttendance(@Body data: RequestAttendanceRequest): Call<RequestAttendanceResponse>
 

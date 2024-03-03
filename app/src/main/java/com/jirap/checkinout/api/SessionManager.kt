@@ -2,7 +2,7 @@ package com.jirap.checkinout.api
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.jirap.checkinout.api.model.LogInUserResponse
+import com.jirap.checkinout.api.model.LogInUserData
 
 class SessionManager(context: Context) {
     private var prefs: SharedPreferences = context.getSharedPreferences("MyPref", Context.MODE_PRIVATE)
@@ -14,27 +14,27 @@ class SessionManager(context: Context) {
     }
 
     fun fetchAuthToken():String {
-        return prefs.getString("accessToken", null)!!
+        return prefs.getString("accessToken", "")!!
     }
 
     fun fetchRefreshToken():String {
-        return prefs.getString("refreshToken", null)!!
+        return prefs.getString("refreshToken", "")!!
     }
 
     fun getUsername():String {
-        return prefs.getString("username", null)!!
+        return prefs.getString("username", "")!!
     }
 
     fun isRefresh():Boolean {
         return prefs.getBoolean("isRefresh", false)!!
     }
 
-    fun saveAccessToken(response: LogInUserResponse,username: String,expireTime: Long,isRefresh : Boolean) {
+    fun saveAccessToken(response: LogInUserData, username: String, expireTime: Long, isRefresh: Boolean) {
         val editor = prefs.edit()
         editor.putString("username", username)
-        editor.putString("accessToken", response.data.access_token)
+        editor.putString("accessToken", response.access_token)
         editor.putLong("expiresIn",expireTime)
-        editor.putString("refreshToken",response.data.refresh_token)
+        editor.putString("refreshToken",response.refresh_token)
         editor.putBoolean("isRefresh",isRefresh)
         editor.apply()
     }

@@ -8,11 +8,9 @@ import android.os.Looper
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.jirap.checkinout.api.SessionManager
-import com.jirap.checkinout.api.model.LogInUserRequest
 import com.jirap.checkinout.api.model.LogInUserResponse
 import com.jirap.checkinout.api.model.RefreshTokenRequest
 import com.jirap.checkinout.login.LoginActivity
-import com.jirap.checkinout.login.LoginPresenter
 import com.jirap.checkinout.login.RefreshPresenter
 import com.jirap.checkinout.login.RefreshTokenContractor
 
@@ -58,7 +56,7 @@ class SplashScreen : AppCompatActivity(), RefreshTokenContractor.View {
     override fun success(loginResponse: LogInUserResponse) {
         val expireTime = System.currentTimeMillis() + 86400 * 1000
         val sessionManager = SessionManager(this)
-        sessionManager.saveAccessToken(loginResponse,sessionManager.getUsername(),expireTime,false)
+        sessionManager.saveAccessToken(loginResponse.data,sessionManager.getUsername(),expireTime,false)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()

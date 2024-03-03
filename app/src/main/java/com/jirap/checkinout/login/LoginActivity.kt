@@ -2,11 +2,16 @@ package com.jirap.checkinout.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.jirap.checkinout.MainActivity
+import com.jirap.checkinout.R
 import com.jirap.checkinout.api.SessionManager
 import com.jirap.checkinout.api.model.LogInUserRequest
 import com.jirap.checkinout.api.model.LogInUserResponse
@@ -20,6 +25,9 @@ class LoginActivity : AppCompatActivity(),LoginContractor.View {
     private lateinit var stUsername: String
     private lateinit var stPassword: String
     private lateinit var loading: ProgressBar
+    private lateinit var icShowPassword: ImageView
+    private lateinit var username: EditText
+    private lateinit var password: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,6 +41,19 @@ class LoginActivity : AppCompatActivity(),LoginContractor.View {
         login.setOnClickListener {
             loading.visibility = View.VISIBLE
             requestLogin()
+        }
+        username = binding.username
+        password = binding.password
+        icShowPassword = binding.showPassBtn
+        icShowPassword.setOnClickListener{
+            if(password.transformationMethod.equals(PasswordTransformationMethod.getInstance())){
+                password.transformationMethod = HideReturnsTransformationMethod.getInstance();
+                icShowPassword.setImageResource(R.drawable.hide)
+            } else{
+                password.transformationMethod = PasswordTransformationMethod.getInstance();
+                icShowPassword.setImageResource(R.drawable.view)
+
+            }
         }
     }
 
@@ -55,7 +76,7 @@ class LoginActivity : AppCompatActivity(),LoginContractor.View {
     override fun success(loginResponse: LogInUserResponse) {
         val expireTime = System.currentTimeMillis() +  loginResponse.data.expires_in * 1000
         val sessionManager = SessionManager(this)
-        sessionManager.saveAccessToken(loginResponse,stUsername,expireTime,true)
+        sessionManager.saveAccessToken(loginResponse.data,stUsername,expireTime,true)
         loading.visibility = View.GONE
         goToMainActivity()
     }

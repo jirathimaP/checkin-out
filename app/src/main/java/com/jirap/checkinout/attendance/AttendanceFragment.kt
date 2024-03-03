@@ -13,15 +13,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.jirap.checkinout.api.model.AttendanceRequest
 import com.jirap.checkinout.api.model.AttendanceResponse
-import com.jirap.checkinout.api.model.LogInUserRequest
 import com.jirap.checkinout.databinding.FragmentAttendanceBinding
-import com.jirap.checkinout.login.LoginContractor
-import com.jirap.checkinout.login.LoginPresenter
 
 class AttendanceFragment : Fragment(), LocationListener, AttendanceContractor.View {
 
@@ -51,8 +47,13 @@ class AttendanceFragment : Fragment(), LocationListener, AttendanceContractor.Vi
         _binding = FragmentAttendanceBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        if (hasReadLocationPermission()){
+            getLocation()
+        } else {
+            requestPermission()
+        }
         presenter = AttendancePresenter(this)
-        getLocation()
+
         val btnCheckIn = binding.btnCheckIn
         val btnCheckOut = binding.btnCheckOut
         btnCheckIn.setOnClickListener {
@@ -63,7 +64,12 @@ class AttendanceFragment : Fragment(), LocationListener, AttendanceContractor.Vi
         }
         return root
     }
-
+    private fun hasReadLocationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
     private fun requestCheckIn() {
         val attendanceRequest = AttendanceRequest(
             operation = operation,
@@ -101,7 +107,13 @@ class AttendanceFragment : Fragment(), LocationListener, AttendanceContractor.Vi
         super.onDestroyView()
         _binding = null
     }
-
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            locationPermissionCode
+        )
+    }
     private fun getLocation() {
         locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if ((ContextCompat.checkSelfPermission(
@@ -132,6 +144,7 @@ class AttendanceFragment : Fragment(), LocationListener, AttendanceContractor.Vi
         if (requestCode == locationPermissionCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show()
+                getLocation()
             } else {
                 Toast.makeText(requireActivity(), "Permission Denied", Toast.LENGTH_SHORT).show()
             }

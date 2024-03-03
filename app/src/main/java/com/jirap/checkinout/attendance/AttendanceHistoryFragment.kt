@@ -14,18 +14,19 @@ import androidx.lifecycle.ViewModelProvider
 import com.jirap.checkinout.R
 import com.jirap.checkinout.api.model.AttendanceRequest
 import com.jirap.checkinout.api.model.AttendanceResponse
+import com.jirap.checkinout.api.model.AttendanceResponseHistory
 import com.jirap.checkinout.databinding.FragmentAttendanceHistoryBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class AttendanceHistoryFragment : Fragment(), AttendanceContractor.View {
+class AttendanceHistoryFragment : Fragment(), AttendanceHistoryContractor.View {
 
     private var _binding: FragmentAttendanceHistoryBinding? = null
 
     private val binding get() = _binding!!
     private var operation = "USER"
-    lateinit var presenter: AttendancePresenter
+    lateinit var presenter: AttendanceHistoryPresenter
     private lateinit var tableView: TableLayout
 
     override fun onCreateView(
@@ -39,7 +40,7 @@ class AttendanceHistoryFragment : Fragment(), AttendanceContractor.View {
         _binding = FragmentAttendanceHistoryBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        presenter = AttendancePresenter(this)
+        presenter = AttendanceHistoryPresenter(this)
         tableView = binding.tableView
         val attendanceRequest = AttendanceRequest(
             operation = operation,
@@ -53,7 +54,7 @@ class AttendanceHistoryFragment : Fragment(), AttendanceContractor.View {
             event = "",
             status = ""
         )
-        presenter.attendance(requireContext(),attendanceRequest)
+        presenter.attendanceHistory(requireContext(),attendanceRequest)
         return root
     }
 
@@ -62,7 +63,7 @@ class AttendanceHistoryFragment : Fragment(), AttendanceContractor.View {
         _binding = null
     }
 
-    override fun success(attendanceResponse: AttendanceResponse) {
+    override fun success(attendanceResponse: AttendanceResponseHistory) {
         val formatterOld =
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
         var formatterDate = SimpleDateFormat("dd/MM/yyyy")
