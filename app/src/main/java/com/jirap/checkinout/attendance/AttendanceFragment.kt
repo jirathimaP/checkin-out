@@ -19,7 +19,7 @@ import com.jirap.checkinout.api.model.AttendanceRequest
 import com.jirap.checkinout.api.model.AttendanceResponse
 import com.jirap.checkinout.databinding.FragmentAttendanceBinding
 
-class AttendanceFragment : Fragment(), LocationListener, AttendanceContractor.View {
+class AttendanceFragment : Fragment(), AttendanceContractor.View {
 
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
@@ -127,29 +127,15 @@ class AttendanceFragment : Fragment(), LocationListener, AttendanceContractor.Vi
                 locationPermissionCode
             )
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, locationListener)
     }
 
-    override fun onLocationChanged(location: Location) {
+    /*override fun onLocationChanged(location: Location) {
         lat = location.latitude
         long = location.longitude
-    }
+    }*/
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == locationPermissionCode) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show()
-                getLocation()
-            } else {
-                Toast.makeText(requireActivity(), "Permission Denied", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+
 
     override fun success(attendanceResponse: AttendanceResponse) {
         Toast.makeText(requireActivity(), "Check In Success.", Toast.LENGTH_SHORT).show()
@@ -157,5 +143,14 @@ class AttendanceFragment : Fragment(), LocationListener, AttendanceContractor.Vi
 
     override fun fail(responseMessage: String?) {
         Toast.makeText(requireActivity(), "Fail!! : $responseMessage", Toast.LENGTH_SHORT).show()
+    }
+    private val locationListener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            lat = location.latitude
+            long = location.longitude
+        }
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {}
     }
 }
