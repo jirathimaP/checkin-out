@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 
 object ServiceLoginBuilder {
-    var apiBaseUrl: String = "https://my1cbw5eld.execute-api.ap-southeast-1.amazonaws.com/"
+    var apiBaseUrl: String = "https://3r3bjkdo6a.execute-api.ap-southeast-1.amazonaws.com/prod-auth/"
 
     private val httpClient = OkHttpClient.Builder()
 

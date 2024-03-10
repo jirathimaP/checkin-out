@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 
 object ServiceBuilder {
-    var apiBaseUrl: String = "https://gi8o7p06s5.execute-api.ap-southeast-1.amazonaws.com/"
+    var apiBaseUrl: String = "https://3c0m4m6rw3.execute-api.ap-southeast-1.amazonaws.com/prod-hr/"
 
     fun <S> buildService(context: Context,serviceClass: Class<S>?): S {
         val client = OkHttpClient.Builder()
